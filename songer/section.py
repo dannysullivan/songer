@@ -29,15 +29,22 @@ class Section():
     def create_melody(self):
         self.melody = []
         for beat in range(Section.beats):
-            self.melody.append(random.choice(Section.scale_degrees))
+            random_note = random.choice(Section.scale_degrees)
+            self.melody.append(random.choice([random_note, 'rest']))
 
     def write_to_midi(self):
         pattern = midi.Pattern()
         track = midi.Track()
         pattern.append(track)
+        offset = 0
         for scale_degree in self.melody:
-            track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=60+scale_degree))
-            track.append(midi.NoteOffEvent(tick=240, pitch=60+scale_degree))
+            if scale_degree == "rest":
+                offset += 240
+            else:
+                track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=60+scale_degree))
+                track.append(midi.NoteOffEvent(tick=240, pitch=60+scale_degree))
+                offset = 0
+
         track.append(midi.EndOfTrackEvent(tick=1))
 
         bass_track = midi.Track()
