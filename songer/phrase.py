@@ -1,5 +1,7 @@
 import random
 import re
+from gtts import gTTS
+from pydub import AudioSegment
 
 class Phrase():
     beats_per_phrase = 8
@@ -26,6 +28,35 @@ class Phrase():
         for syllable in self.syllables:
             self.melody.append(self._note_for_syllable(syllable))
         self._add_rests()
+
+    def create_mp3(self):
+        # syllable_mp3s = []
+        # for syllable in self.syllables:
+            # syllable_mp3 = gTTS(text=syllable, lang='en')
+            # syllable_mp3.save('mp3s/' + syllable + '.mp3')
+            # syllable_mp3s.append(AudioSegment.from_mp3(syllable + '.mp3'))
+        syllable_mp3s = [AudioSegment.from_mp3('Hello.mp3')[:300] for syllable in self.syllables] 
+
+        mp3s_to_join = []
+        index = 0
+        for (note, rhythm) in self.melody:
+            milliseconds = 250 * rhythm
+            if note == "rest":
+                mp3s_to_join.append(AudioSegment.from_mp3('empty.mp3')[:milliseconds])
+            else:
+                syllable_mp3 = syllable_mp3s[index]
+                syllable_length = syllable_mp3.duration_seconds * 1000 # we want milliseconds
+                if syllable_length < milliseconds:
+                    mp3s_to_join.append(syllable_mp3)
+                    mp3s_to_join.append(AudioSegment.from_mp3('empty.mp3')[:(milliseconds - syllable_length)])
+                else:
+                    mp3s_to_join.append(syllable_mp3[:milliseconds])
+                index += 1
+
+        joined_mp3 = mp3s_to_join[0] + mp3s_to_join[1]
+        for mp3 in mp3s_to_join[2:]:
+            joined_mp3 += mp3
+        return joined_mp3
 
     def _note_for_syllable(self, syllable):
         """
