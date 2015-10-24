@@ -1,13 +1,12 @@
-from section import Section
-from rhythm_generator import RhythmGenerator
+from song import Song
 
 def main():
-    section = Section(["IV", "I", "V", "V"])
-    rhythm = RhythmGenerator().create_rhythm()
-    section.create_melody_for_rhythm(rhythm)
-    print sum([duration for (note, duration) in section.melody])
-    section.duplicate_melody()
-    section.write_to_midi()
+    song = Song()
+    song.append_phrase("I", "This is a")
+    song.append_phrase("vi", "ly-ri-cal test")
+    song.append_phrase("IV", "lets see how it goes")
+    song.append_phrase("V", "lets see how it goes")
+    song.write_to_midi()
 
 if __name__ == "__main__":
     main()
