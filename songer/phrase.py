@@ -3,7 +3,7 @@ import re
 
 class Phrase():
     beats_per_phrase = 8
-    scale_degrees = [0, 2, 4, 7, 9] # 4 bars of eighth notes
+    scale_degrees = [0, 2, 4, 7, 9, 12] # 4 bars of eighth notes
     chord_bass_map = {
         "I": 0,
         "ii": 2,
@@ -24,10 +24,34 @@ class Phrase():
     def create_melody(self):
         self.melody = []
         for syllable in self.syllables:
-            rhythm = random.choice([1,2])
-            note = random.choice(Phrase.scale_degrees)
-            self.melody.append((note, rhythm))
+            self.melody.append(self._note_for_syllable(syllable))
         self._add_rests()
+
+    def _note_for_syllable(self, syllable):
+        """
+        Go for stepwise motion or no motion most of the time
+        """
+        rhythm = random.choice([1,2])
+
+        if len(self.melody) > 0:
+            previous_note = self.melody[-1]
+            motion = random.choice(["stepwise", "none", "random"])
+            if motion == "stepwise":
+                note_position = Phrase.scale_degrees.index(previous_note[0])
+                neighbors = []
+                if note_position != 0:
+                    neighbors.append(Phrase.scale_degrees[note_position - 1])
+                if note_position != (len(Phrase.scale_degrees)-1):
+                    neighbors.append(Phrase.scale_degrees[note_position + 1])
+                note = random.choice(neighbors)
+            elif motion == "none":
+                note = previous_note[0]
+            else:
+                note = random.choice(Phrase.scale_degrees)
+        else:
+            note = random.choice(Phrase.scale_degrees)
+
+        return (note, rhythm)
 
     def _add_rests(self):
         """
