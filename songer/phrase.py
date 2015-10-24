@@ -2,7 +2,7 @@ import random
 import re
 
 class Phrase():
-    beats_per_phrase = 16
+    beats_per_phrase = 8
     scale_degrees = [0, 2, 4, 7, 9] # 4 bars of eighth notes
     chord_bass_map = {
         "I": 0,
@@ -24,9 +24,15 @@ class Phrase():
     def create_melody(self):
         self.melody = []
         for syllable in self.syllables:
-            rhythm = random.randint(1,4)
+            rhythm = random.choice([1,2])
             note = random.choice(Phrase.scale_degrees)
             self.melody.append((note, rhythm))
+        self._add_rests()
+
+    def _add_rests(self):
+        """
+        If the melody doesn't fill the phrase, add a rest to its beginning or end
+        """
         beats_in_melody = sum([rhythm for (note, rhythm) in self.melody]) 
         if beats_in_melody < Phrase.beats_per_phrase:
             if random.choice([True, False]):
