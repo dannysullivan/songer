@@ -39,7 +39,7 @@ class Song():
                     offset = 0
 
             bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=48+phrase.bass_note))
-            bass_track.append(midi.NoteOffEvent(tick=880, pitch=48+phrase.bass_note))
+            bass_track.append(midi.NoteOffEvent(tick=1760, pitch=48+phrase.bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))

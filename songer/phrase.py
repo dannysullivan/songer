@@ -5,7 +5,7 @@ from pydub import AudioSegment
 import os
 
 class Phrase():
-    beats_per_phrase = 8
+    beats_per_phrase = 16
     scale_degrees = [0, 2, 4, 7, 9, 12] # 4 bars of eighth notes
     chord_bass_map = {
         "I": 0,
@@ -64,7 +64,7 @@ class Phrase():
         """
         Go for stepwise motion or no motion most of the time
         """
-        rhythm = random.choice([1,2])
+        rhythm = random.choice([2,3,4])
 
         if len(self.melody) > 0:
             previous_note = self.melody[-1]
