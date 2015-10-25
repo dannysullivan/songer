@@ -2,6 +2,7 @@ import random
 import re
 from gtts import gTTS
 from pydub import AudioSegment
+import os
 
 class Phrase():
     beats_per_phrase = 8
@@ -31,11 +32,11 @@ class Phrase():
 
     def create_mp3(self):
         syllable_mp3s = []
-        # for syllable in self.syllables:
+        for syllable in self.syllables:
             # syllable_mp3 = gTTS(text=syllable, lang='en')
             # syllable_mp3.save('mp3s/' + syllable + '.mp3')
-            # syllable_mp3s.append(AudioSegment.from_mp3('mp3s/' + syllable + '.mp3'))
-        syllable_mp3s = [AudioSegment.from_mp3('mp3s/' + syllable + '.mp3')[100:] for syllable in self.syllables] 
+            os.system("say -o mp3s/"+syllable+".aiff -v Victoria "+syllable)
+            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + syllable + '.aiff', 'aiff'))
 
         mp3s_to_join = []
         index = 0
