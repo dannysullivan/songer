@@ -17,7 +17,7 @@ class Song():
         previous_split_index = 0
         # for now, split lyric into roughly equal quarters
         for index in range(1,5):
-            split_index = index * (len(syllables)/4)
+            split_index = index * (len(syllables)/4) + 1
             parts_of_lyric.append(syllables[previous_split_index:split_index])
             previous_split_index = split_index
 
@@ -42,7 +42,7 @@ class Song():
             joined_mp3 += phrase_mp3
         joined_mp3.export('full.mp3', format='mp3')
 
-    def write_to_midi(self):
+    def write_to_midi(self, filename):
         """
         Resolution is 220 ticks per quarter note
         """
@@ -70,4 +70,4 @@ class Song():
         pattern.append(track)
         pattern.append(bass_track)
 
-        midi.write_midifile("example.mid", pattern)
+        midi.write_midifile(filename, pattern)
