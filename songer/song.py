@@ -6,9 +6,12 @@ class Song():
     def __init__(self):
         self.phrases = []
 
-    def append_phrase(self, chord, lyric):
+    def append_phrase(self, chord, lyric, melody_to_copy=None):
         phrase = Phrase(chord, lyric)
-        phrase.create_melody()
+        if melody_to_copy:
+            phrase.melody = melody_to_copy
+        else:
+            phrase.create_melody()
         self.phrases.append(phrase)
 
     def create_voice_mp3(self):
@@ -38,8 +41,8 @@ class Song():
                     track.append(midi.NoteOffEvent(tick=(110*duration), pitch=60+scale_degree))
                     offset = 0
 
-            bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=48+phrase.bass_note))
-            bass_track.append(midi.NoteOffEvent(tick=1760, pitch=48+phrase.bass_note))
+            bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=36+phrase.bass_note))
+            bass_track.append(midi.NoteOffEvent(tick=1760, pitch=36+phrase.bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))

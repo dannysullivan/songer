@@ -33,10 +33,8 @@ class Phrase():
     def create_mp3(self):
         syllable_mp3s = []
         for syllable in self.syllables:
-            # syllable_mp3 = gTTS(text=syllable, lang='en')
-            # syllable_mp3.save('mp3s/' + syllable + '.mp3')
             os.system("say -o mp3s/"+syllable+".aiff -v Victoria "+syllable)
-            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + syllable + '.aiff', 'aiff'))
+            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + syllable + '.aiff', 'aiff')[80:])
 
         mp3s_to_join = []
         index = 0
@@ -54,7 +52,6 @@ class Phrase():
                     mp3s_to_join.append(syllable_mp3[:milliseconds])
                 index += 1
 
-        print [mp3.duration_seconds for mp3 in mp3s_to_join]
         joined_mp3 = mp3s_to_join[0] + mp3s_to_join[1]
         for mp3 in mp3s_to_join[2:]:
             joined_mp3 += mp3
