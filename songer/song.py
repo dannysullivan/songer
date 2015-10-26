@@ -1,13 +1,33 @@
 from phrase import Phrase
 import midi
+import re
+import random
 from gtts import gTTS
 
 class Song():
     def __init__(self):
         self.phrases = []
+        chords = Phrase.chord_bass_map.keys()
+        self.chord_progression = [random.choice(chords) for i in range(4)]
 
-    def append_phrase(self, chord, lyric, melody_to_copy=None):
-        phrase = Phrase(chord, lyric)
+    def add_lyric(self, lyric):
+        syllables = re.split("\s|\-", lyric)
+        print syllables
+        parts_of_lyric = []
+        previous_split_index = 0
+        # for now, split lyric into roughly equal quarters
+        for index in range(1,5):
+            split_index = index * (len(syllables)/4)
+            parts_of_lyric.append(syllables[previous_split_index:split_index])
+            previous_split_index = split_index
+
+        [self._append_phrase(part_of_lyric) for part_of_lyric in parts_of_lyric]
+
+    def _append_phrase(self, lyric, melody_to_copy=None):
+        chords_so_far = len(self.phrases)
+        next_chord = self.chord_progression[chords_so_far % len(self.chord_progression)]
+
+        phrase = Phrase(lyric, next_chord)
         if melody_to_copy:
             phrase.melody = melody_to_copy
         else:

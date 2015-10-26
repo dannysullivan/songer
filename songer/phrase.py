@@ -16,9 +16,10 @@ class Phrase():
         "vi": 9
     }
 
-    def __init__(self, chord, lyric):
+    def __init__(self, syllables, chord):
+        print syllables
         self.chord = chord
-        self.syllables = re.split("\s|\-", lyric)
+        self.syllables = syllables
 
     @property
     def bass_note(self):
