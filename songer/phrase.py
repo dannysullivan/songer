@@ -5,8 +5,7 @@ from note import Note
 import os
 
 class Phrase():
-    beats_per_phrase = 64
-    scale_degrees = [0, 2, 4, 7, 9, 12] # 4 bars of eighth notes
+    scale_degrees = [0, 2, 4, 7, 9, 12]
     chord_bass_map = {
         "I": 0,
         "ii": 2,
@@ -16,14 +15,20 @@ class Phrase():
         "vi": 9
     }
 
-    def __init__(self, syllables):
+    def __init__(self, syllables, number_of_measures):
         chords = Phrase.chord_bass_map.keys()
-        self.chord_progression = [random.choice(chords) for i in range(4)]
+        self.number_of_measures = number_of_measures
+        print self.number_of_measures
+        self.chord_progression = [random.choice(chords) for i in range(self.number_of_measures/2)]
         self.syllables = syllables
+        self.beats_per_measure = 8
 
     @property
     def bass_notes(self):
         return [Phrase.chord_bass_map[chord] for chord in self.chord_progression]
+
+    def total_beats(self):
+        return self.number_of_measures * self.beats_per_measure
 
     def create_melody(self):
         self.melody = []
@@ -89,7 +94,7 @@ class Phrase():
         If the melody doesn't fill the phrase, add rests randomly
         """
         beats_in_melody = sum([note.rhythm for note in self.melody]) 
-        while beats_in_melody < Phrase.beats_per_phrase:
+        while beats_in_melody < self.total_beats():
             random_note_position = random.choice(range(len(self.melody)))
             self.melody.insert(random_note_position, Note('rest', 1, ''))
             beats_in_melody += 1

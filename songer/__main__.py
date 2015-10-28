@@ -5,7 +5,7 @@ import shutil
 
 def main():
     song = Song()
-    song.add_lyric("take me out to the cliffs Im not red-dee for all this")
+    song.add_lyric("take me out to the cliffs", 4)
     song.write_to_midi(str(datetime.datetime.now())+".mid")
     # if not os.path.isdir('mp3s'):
         # os.mkdir('mp3s')

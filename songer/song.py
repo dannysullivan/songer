@@ -7,13 +7,10 @@ class Song():
     def __init__(self):
         self.phrases = []
 
-    def add_lyric(self, lyric):
-        self._append_phrase(lyric)
-
-    def _append_phrase(self, lyric):
+    def add_lyric(self, lyric, number_of_measures):
         syllables = re.split("\s|\-", lyric)
 
-        phrase = Phrase(syllables)
+        phrase = Phrase(syllables, number_of_measures)
         phrase.create_melody()
         self.phrases.append(phrase)
 
