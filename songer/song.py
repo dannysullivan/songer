@@ -6,31 +6,15 @@ import random
 class Song():
     def __init__(self):
         self.phrases = []
-        chords = Phrase.chord_bass_map.keys()
-        self.chord_progression = [random.choice(chords) for i in range(4)]
 
     def add_lyric(self, lyric):
+        self._append_phrase(lyric)
+
+    def _append_phrase(self, lyric):
         syllables = re.split("\s|\-", lyric)
-        print syllables
-        parts_of_lyric = []
-        previous_split_index = 0
-        # for now, split lyric into roughly equal quarters
-        for index in range(1,5):
-            split_index = index * (len(syllables)/4) + 1
-            parts_of_lyric.append(syllables[previous_split_index:split_index])
-            previous_split_index = split_index
 
-        [self._append_phrase(part_of_lyric) for part_of_lyric in parts_of_lyric]
-
-    def _append_phrase(self, lyric, melody_to_copy=None):
-        chords_so_far = len(self.phrases)
-        next_chord = self.chord_progression[chords_so_far % len(self.chord_progression)]
-
-        phrase = Phrase(lyric, next_chord)
-        if melody_to_copy:
-            phrase.melody = melody_to_copy
-        else:
-            phrase.create_melody()
+        phrase = Phrase(syllables)
+        phrase.create_melody()
         self.phrases.append(phrase)
 
     def create_voice_mp3(self):
@@ -51,8 +35,8 @@ class Song():
 
         offset = 0
         for phrase in self.phrases:
-            print phrase.melody
             for note in phrase.melody:
+                print note
                 if note.pitch == "rest":
                     offset += 110*note.rhythm
                 else:
@@ -60,8 +44,9 @@ class Song():
                     track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=60+note.pitch))
                     offset = 0
 
-            bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=36+phrase.bass_note))
-            bass_track.append(midi.NoteOffEvent(tick=1760, pitch=36+phrase.bass_note))
+            for bass_note in phrase.bass_notes:
+                bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=36+bass_note))
+                bass_track.append(midi.NoteOffEvent(tick=1760, pitch=36+bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))

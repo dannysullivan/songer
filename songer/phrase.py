@@ -5,7 +5,7 @@ from note import Note
 import os
 
 class Phrase():
-    beats_per_phrase = 16
+    beats_per_phrase = 64
     scale_degrees = [0, 2, 4, 7, 9, 12] # 4 bars of eighth notes
     chord_bass_map = {
         "I": 0,
@@ -16,14 +16,14 @@ class Phrase():
         "vi": 9
     }
 
-    def __init__(self, syllables, chord):
-        print syllables
-        self.chord = chord
+    def __init__(self, syllables):
+        chords = Phrase.chord_bass_map.keys()
+        self.chord_progression = [random.choice(chords) for i in range(4)]
         self.syllables = syllables
 
     @property
-    def bass_note(self):
-        return Phrase.chord_bass_map[self.chord]
+    def bass_notes(self):
+        return [Phrase.chord_bass_map[chord] for chord in self.chord_progression]
 
     def create_melody(self):
         self.melody = []
