@@ -2,7 +2,6 @@ from phrase import Phrase
 import midi
 import re
 import random
-from gtts import gTTS
 
 class Song():
     def __init__(self):
@@ -53,12 +52,12 @@ class Song():
         offset = 0
         for phrase in self.phrases:
             print phrase.melody
-            for (scale_degree, duration) in phrase.melody:
-                if scale_degree == "rest":
-                    offset += 110*duration
+            for note in phrase.melody:
+                if note.pitch == "rest":
+                    offset += 110*note.rhythm
                 else:
-                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=60+scale_degree))
-                    track.append(midi.NoteOffEvent(tick=(110*duration), pitch=60+scale_degree))
+                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=60+note.pitch))
+                    track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=60+note.pitch))
                     offset = 0
 
             bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=36+phrase.bass_note))

@@ -1,7 +1,7 @@
 import random
 import re
-from gtts import gTTS
 from pydub import AudioSegment
+from note import Note
 import os
 
 class Phrase():
@@ -68,29 +68,29 @@ class Phrase():
             previous_note = self.melody[-1]
             motion = random.choice(["stepwise", "none", "random"])
             if motion == "stepwise":
-                note_position = Phrase.scale_degrees.index(previous_note[0])
+                note_position = Phrase.scale_degrees.index(previous_note.pitch)
                 neighbors = []
                 if note_position != 0:
                     neighbors.append(Phrase.scale_degrees[note_position - 1])
                 if note_position != (len(Phrase.scale_degrees)-1):
                     neighbors.append(Phrase.scale_degrees[note_position + 1])
-                note = random.choice(neighbors)
+                pitch = random.choice(neighbors)
             elif motion == "none":
-                note = previous_note[0]
+                pitch = previous_note.pitch
             else:
-                note = random.choice(Phrase.scale_degrees)
+                pitch = random.choice(Phrase.scale_degrees)
         else:
-            note = random.choice(Phrase.scale_degrees)
+            pitch = random.choice(Phrase.scale_degrees)
 
-        return (note, rhythm)
+        return Note(pitch, rhythm, syllable)
 
     def _add_rests(self):
         """
         If the melody doesn't fill the phrase, add a rest to its beginning or end
         """
-        beats_in_melody = sum([rhythm for (note, rhythm) in self.melody]) 
+        beats_in_melody = sum([note.rhythm for note in self.melody]) 
         if beats_in_melody < Phrase.beats_per_phrase:
             if random.choice([True, False]):
-                self.melody.append(('rest', Phrase.beats_per_phrase - beats_in_melody))
+                self.melody.append(Note('rest', Phrase.beats_per_phrase - beats_in_melody, ''))
             else:
-                self.melody.insert(0, ('rest', Phrase.beats_per_phrase - beats_in_melody))
+                self.melody.insert(0, Note('rest', Phrase.beats_per_phrase - beats_in_melody, ''))
