@@ -86,11 +86,10 @@ class Phrase():
 
     def _add_rests(self):
         """
-        If the melody doesn't fill the phrase, add a rest to its beginning or end
+        If the melody doesn't fill the phrase, add rests randomly
         """
         beats_in_melody = sum([note.rhythm for note in self.melody]) 
-        if beats_in_melody < Phrase.beats_per_phrase:
-            if random.choice([True, False]):
-                self.melody.append(Note('rest', Phrase.beats_per_phrase - beats_in_melody, ''))
-            else:
-                self.melody.insert(0, Note('rest', Phrase.beats_per_phrase - beats_in_melody, ''))
+        while beats_in_melody < Phrase.beats_per_phrase:
+            random_note_position = random.choice(range(len(self.melody)))
+            self.melody.insert(random_note_position, Note('rest', 1, ''))
+            beats_in_melody += 1
