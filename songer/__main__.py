@@ -6,6 +6,8 @@ import requests
 from pymarkovchain import MarkovChain
 
 def fetch_lyrics(artist, lines):
+    API_KEY = os.environ.get('API_KEY')
+
     uri = "http://api.lyricsnmusic.com/songs"
     params = {
         'api_key': API_KEY,

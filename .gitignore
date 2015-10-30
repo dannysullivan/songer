@@ -1,2 +1,4 @@
 *.pyc
 *.mid
+.env
+markov
