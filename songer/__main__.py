@@ -27,18 +27,19 @@ def fetch_lyrics(artist, lines):
     for line in range(0, lines):
         line_string = mc.generateString()
         result.append(line_string)
+        print line_string
     return result
 
 
 def main():
     song = Song()
-    lyric = fetch_lyrics('Coheed and Cambria', 1)[0]
+    lyric = fetch_lyrics('The Beatles', 1)[0]
     song.add_lyric(lyric, 4)
     song.write_to_midi(str(datetime.datetime.now())+".mid")
-    # if not os.path.isdir('mp3s'):
-        # os.mkdir('mp3s')
-    # song.create_voice_mp3()
-    # shutil.rmtree('mp3s')
+    if not os.path.isdir('mp3s'):
+        os.mkdir('mp3s')
+    song.create_voice_mp3()
+    shutil.rmtree('mp3s')
 
 
 if __name__ == "__main__":

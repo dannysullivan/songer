@@ -38,15 +38,15 @@ class Phrase():
 
     def create_mp3(self):
         syllable_mp3s = []
-        for syllable in self.syllables:
-            os.system("say -o mp3s/"+syllable+".aiff -v Victoria "+syllable)
-            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + syllable + '.aiff', 'aiff')[80:])
+        for index, syllable in enumerate(self.syllables):
+            os.system("say -o mp3s/"+str(index)+".aiff -v Victoria "+syllable)
+            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + str(index) + '.aiff', 'aiff')[80:])
 
         mp3s_to_join = []
         index = 0
-        for (note, rhythm) in self.melody:
-            milliseconds = 250 * rhythm
-            if note == "rest":
+        for note in self.melody:
+            milliseconds = 250 * note.rhythm
+            if note.pitch == "rest":
                 mp3s_to_join.append(AudioSegment.from_mp3('empty.mp3')[:milliseconds])
             else:
                 syllable_mp3 = syllable_mp3s[index]
