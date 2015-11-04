@@ -29,20 +29,17 @@ def fetch_lyrics(artist, lines):
     for line in range(0, lines):
         line_string = mc.generateString()
         result.append(line_string)
-        print line_string
     return result
 
 
 def main():
     song = Song()
-    lyric = fetch_lyrics('The Beatles', 1)[0]
-    song.add_lyric(lyric, 4)
+    lyric = " ".join(fetch_lyrics('System of a Down', 3))
+    song.add_lyric(lyric, 8)
     song.write_to_midi(str(datetime.datetime.now())+".mid")
-    if not os.path.isdir('mp3s'):
-        os.mkdir('mp3s')
-    song.create_voice_mp3()
-    shutil.rmtree('mp3s')
-
+    abc_notation = song.to_abc_notation()
+    os.system("perl external/sing/sing.pl -n-4 -t 1.2 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
+    os.system("say -o full.aiff -v Victoria -f voice_notation.txt")
 
 if __name__ == "__main__":
     main()

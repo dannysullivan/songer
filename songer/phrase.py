@@ -14,6 +14,17 @@ class Phrase():
         "V": 7,
         "vi": 9
     }
+    degrees_to_notes_map = {
+        0: 'C',
+        2: 'D',
+        4: 'E',
+        5: 'F',
+        7: 'G',
+        9: 'A',
+        11: 'B',
+        12: 'c',
+        'rest': 'x'
+    }
 
     def __init__(self, syllables, number_of_measures):
         chords = Phrase.chord_bass_map.keys()
@@ -36,32 +47,12 @@ class Phrase():
             self.melody.append(self._note_for_syllable(syllable))
         self._add_rests()
 
-    def create_mp3(self):
-        syllable_mp3s = []
-        for index, syllable in enumerate(self.syllables):
-            os.system("say -o mp3s/"+str(index)+".aiff -v Victoria "+syllable)
-            syllable_mp3s.append(AudioSegment.from_file('mp3s/' + str(index) + '.aiff', 'aiff')[80:])
-
-        mp3s_to_join = []
-        index = 0
+    def to_abc_notation(self):
+        notation = ""
         for note in self.melody:
-            milliseconds = 250 * note.rhythm
-            if note.pitch == "rest":
-                mp3s_to_join.append(AudioSegment.from_mp3('empty.mp3')[:milliseconds])
-            else:
-                syllable_mp3 = syllable_mp3s[index]
-                syllable_length = syllable_mp3.duration_seconds * 1000 # we want milliseconds
-                if syllable_length < milliseconds:
-                    mp3s_to_join.append(syllable_mp3)
-                    mp3s_to_join.append(AudioSegment.from_mp3('empty.mp3')[:(milliseconds - syllable_length)])
-                else:
-                    mp3s_to_join.append(syllable_mp3[:milliseconds])
-                index += 1
-
-        joined_mp3 = mp3s_to_join[0] + mp3s_to_join[1]
-        for mp3 in mp3s_to_join[2:]:
-            joined_mp3 += mp3
-        return joined_mp3
+            notation += Phrase.degrees_to_notes_map[note.pitch]
+            notation += str(note.rhythm)
+        return notation
 
     def _note_for_syllable(self, syllable):
         """

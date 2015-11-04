@@ -14,16 +14,8 @@ class Song():
         phrase.create_melody()
         self.phrases.append(phrase)
 
-    def create_voice_mp3(self):
-        phrase_mp3s = [phrase.create_mp3() for phrase in self.phrases]
-
-        if len(phrase_mp3s) == 1:
-            joined_mp3 = phrase_mp3s[0]
-        else:
-            joined_mp3 = phrase_mp3s[0] + phrase_mp3s[1]
-            for phrase_mp3 in phrase_mp3s[2:]:
-                joined_mp3 += phrase_mp3
-        joined_mp3.export('full.mp3', format='mp3')
+    def to_abc_notation(self):
+        return "".join([phrase.to_abc_notation() for phrase in self.phrases])
 
     def write_to_midi(self, filename):
         """
