@@ -48,5 +48,10 @@ def main():
     full_mix = vocal_track.overlay(accompaniment)
     full_mix.export("full_mix.aiff", format="aiff")
 
+    os.remove('vocal_track.aiff')
+    os.remove('accompaniment.aiff')
+    os.remove('voice_notation.txt')
+    os.remove('midi_output.mid')
+
 if __name__ == "__main__":
     main()
