@@ -1,7 +1,7 @@
 from song import Song
 import datetime
 import os
-import shutil
+from pydub import AudioSegment
 import requests
 from pymarkovchain import MarkovChain
 
@@ -35,11 +35,18 @@ def fetch_lyrics(artist, lines):
 def main():
     song = Song()
     lyric = " ".join(fetch_lyrics('System of a Down', 3))
+    # lyric = " ".join(["one"] * 20)
     song.add_lyric(lyric, 8)
-    song.write_to_midi(str(datetime.datetime.now())+".mid")
+    song.write_to_midi("midi_output.mid")
     abc_notation = song.to_abc_notation()
-    os.system("perl external/sing/sing.pl -n-4 -t 1.2 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
-    os.system("say -o full.aiff -v Victoria -f voice_notation.txt")
+    os.system("perl external/sing/sing.pl -n-4 -t 1.25 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
+    os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
+    os.system("fluidsynth -g 0.7 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
+
+    vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
+    accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
+    full_mix = vocal_track.overlay(accompaniment)
+    full_mix.export("full_mix.aiff", format="aiff")
 
 if __name__ == "__main__":
     main()
