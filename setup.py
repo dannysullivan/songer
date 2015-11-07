@@ -11,6 +11,7 @@ setup(name='songer',
       install_requires=[
           'pymarkovchain',
           'pydub',
-          'python-midi'
+          'python-midi',
+          'pyhyphen'
       ],
       zip_safe=False)

@@ -8,7 +8,7 @@ class Song():
         self.phrases = []
 
     def add_lyric(self, lyric, number_of_measures):
-        syllables = re.split("\s|\-", lyric)
+        syllables = re.split("\s|\-", lyric.lower())
 
         phrase = Phrase(syllables, number_of_measures)
         phrase.create_melody()
@@ -32,13 +32,13 @@ class Song():
                 if note.pitch == "rest":
                     offset += 110*note.rhythm
                 else:
-                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=60+note.pitch))
-                    track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=60+note.pitch))
+                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=64+note.pitch))
+                    track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=64+note.pitch))
                     offset = 0
 
             for bass_note in phrase.bass_notes:
-                bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=36+bass_note))
-                bass_track.append(midi.NoteOffEvent(tick=1760, pitch=36+bass_note))
+                bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=40+bass_note))
+                bass_track.append(midi.NoteOffEvent(tick=1760, pitch=40+bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))

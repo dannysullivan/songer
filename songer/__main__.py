@@ -39,9 +39,9 @@ def main():
     song.add_lyric(lyric, 8)
     song.write_to_midi("midi_output.mid")
     abc_notation = song.to_abc_notation()
-    os.system("perl external/sing/sing.pl -n-4 -t 1.25 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
+    os.system("perl external/sing/sing.pl -n 0 -t 1.25 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
     os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
-    os.system("fluidsynth -g 0.7 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
+    os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
 
     vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
     accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
