@@ -27,13 +27,15 @@ class Phrase():
         'rest': 'x'
     }
 
-    def __init__(self, words, number_of_measures):
-        chords = Phrase.chord_bass_map.keys()
+    def __init__(self, lyric, number_of_measures):
+        self.words = re.split("\s|\-", lyric.lower())
         self.number_of_measures = number_of_measures
-        print self.number_of_measures
+
+        chords = Phrase.chord_bass_map.keys()
         self.chord_progression = [random.choice(chords) for i in range(self.number_of_measures/2)]
-        self.words = words
         self.beats_per_measure = 8
+
+        self.create_melody()
 
     @property
     def bass_notes(self):
@@ -43,10 +45,11 @@ class Phrase():
         return self.number_of_measures * self.beats_per_measure
 
     def create_melody(self):
-        hyphenator = Hyphenator('en_US')
+        # hyphenator = Hyphenator('en_US')
         self.melody = []
         for word in self.words:
-            syllables = hyphenator.syllables(unicode(word))
+            syllables = [word]
+            # syllables = hyphenator.syllables(unicode(word))
             if len(syllables) > 1:
                 for syllable in syllables:
                     self.melody.append(self._note_for_syllable(syllable, True))

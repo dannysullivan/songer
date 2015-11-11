@@ -1,6 +1,7 @@
 from song import Song
 import datetime
 import os
+from phrase import Phrase
 from pydub import AudioSegment
 import requests
 from pymarkovchain import MarkovChain
@@ -34,9 +35,27 @@ def fetch_lyrics(artist, lines):
 
 def main():
     song = Song()
-    lyric = " ".join(fetch_lyrics('System of a Down', 3))
-    # lyric = " ".join(["one"] * 20)
-    song.add_lyric(lyric, 8)
+    # lyric = " ".join(fetch_lyrics('System of a Down', 3))
+    lyric = " ".join(["one"] * 10)
+
+    verse = Phrase(lyric, 4)
+    song.append_phrase(verse)
+    song.append_phrase(verse)
+
+    chorus = Phrase(lyric, 4)
+    song.append_phrase(chorus)
+    song.append_phrase(chorus)
+
+    song.append_phrase(verse)
+    song.append_phrase(verse)
+
+    song.append_phrase(chorus)
+    song.append_phrase(chorus)
+
+    bridge = Phrase(lyric, 4)
+    song.append_phrase(bridge)
+    song.append_phrase(bridge)
+
     song.write_to_midi("midi_output.mid")
     abc_notation = song.to_abc_notation()
     os.system("perl external/sing/sing.pl -n 0 -t 1.25 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")

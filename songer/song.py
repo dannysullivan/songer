@@ -7,11 +7,11 @@ class Song():
     def __init__(self):
         self.phrases = []
 
-    def add_lyric(self, lyric, number_of_measures):
-        syllables = re.split("\s|\-", lyric.lower())
+    def create_phrase(self, lyric, number_of_measures):
+        self.phrases.append(phrase)
+        return phrase
 
-        phrase = Phrase(syllables, number_of_measures)
-        phrase.create_melody()
+    def append_phrase(self, phrase):
         self.phrases.append(phrase)
 
     def to_abc_notation(self):
