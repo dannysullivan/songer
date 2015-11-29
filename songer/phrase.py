@@ -27,13 +27,13 @@ class Phrase():
         'rest': 'x'
     }
 
-    def __init__(self, lyric, number_of_measures):
+    def __init__(self, lyric, number_of_measures, beats_per_measure):
         self.words = re.split("\s|\-", lyric.lower())
         self.number_of_measures = number_of_measures
 
         chords = Phrase.chord_bass_map.keys()
         self.chord_progression = [random.choice(chords) for i in range(self.number_of_measures/2)]
-        self.beats_per_measure = 8
+        self.beats_per_measure = beats_per_measure
 
         self.create_melody()
 

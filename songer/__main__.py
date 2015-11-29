@@ -3,46 +3,18 @@ import datetime
 import os
 from phrase import Phrase
 from pydub import AudioSegment
-import requests
-from pymarkovchain import MarkovChain
-
-def fetch_lyrics(artist, lines):
-    API_KEY = os.environ.get('API_KEY')
-
-    uri = "http://api.lyricsnmusic.com/songs"
-    params = {
-        'api_key': API_KEY,
-        'artist': artist,
-    }
-    response = requests.get(uri, params=params)
-    lyric_list = response.json()
-
-    lyrics = ''
-    for lyric_dict in lyric_list:
-        lyrics += lyric_dict['snippet'].replace('...', '') + ' '
-
-    # Generate a Markov model
-    mc = MarkovChain('./markov')
-    mc.generateDatabase(lyrics)
-
-    # Add lines of lyrics
-    result = []
-    for line in range(0, lines):
-        line_string = mc.generateString()
-        result.append(line_string)
-    return result
-
+from lyric_translator import LyricTranslator
 
 def main():
-    song = Song()
-    # lyric = " ".join(fetch_lyrics('System of a Down', 3))
-    lyric = " ".join(["one"] * 10)
+    song = Song(8)
+    lyric = " ".join(["oh"] * 8)
+    # lyric = "is this real or am I real at all"
 
-    verse = Phrase(lyric, 4)
+    verse = song.create_phrase(lyric, 4)
     song.append_phrase(verse)
     song.append_phrase(verse)
 
-    chorus = Phrase(lyric, 4)
+    chorus = song.create_phrase(lyric, 4)
     song.append_phrase(chorus)
     song.append_phrase(chorus)
 
@@ -52,14 +24,17 @@ def main():
     song.append_phrase(chorus)
     song.append_phrase(chorus)
 
-    bridge = Phrase(lyric, 4)
+    bridge = song.create_phrase(lyric, 4)
     song.append_phrase(bridge)
     song.append_phrase(bridge)
+
+    song.append_phrase(verse)
+    song.append_phrase(verse)
 
     song.write_to_midi("midi_output.mid")
     abc_notation = song.to_abc_notation()
-    os.system("perl external/sing/sing.pl -n 0 -t 1.25 -p "+abc_notation+" "+lyric+" &>voice_notation.txt")
-    os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
+    os.system("perl external/sing/sing.pl -n 0 -t 1.2 -p "+abc_notation+" "+song.lyrics()+" &>voice_notation.txt")
+    os.system("say -o vocal_track_"+str(index)+".aiff -v Victoria -f voice_notation.txt")
     os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
 
     vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
