@@ -2,6 +2,9 @@ from phrase import Phrase
 import midi
 import re
 import random
+import os
+
+from pydub import AudioSegment
 
 class Song():
     def __init__(self, beats_per_measure=8):
@@ -51,3 +54,20 @@ class Song():
         pattern.append(bass_track)
 
         midi.write_midifile(filename, pattern)
+
+    def write_to_audio(self):
+        self.write_to_midi("midi_output.mid")
+        abc_notation = self.to_abc_notation()
+        os.system("perl external/sing/sing.pl -n 0 -t 1.2 -p "+abc_notation+" "+self.lyrics()+" &>voice_notation.txt")
+        os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
+        os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
+
+        vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
+        accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
+        full_mix = vocal_track.overlay(accompaniment)
+        full_mix.export("full_mix.aiff", format="aiff")
+
+        os.remove('vocal_track.aiff')
+        os.remove('accompaniment.aiff')
+        os.remove('voice_notation.txt')
+        os.remove('midi_output.mid')
