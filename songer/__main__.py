@@ -6,8 +6,8 @@ from lyric_translator import LyricTranslator
 
 def main():
     song = Song(8)
-    lyric = " ".join(["oh"] * 8)
-    # lyric = "is this real or am I real at all"
+    # lyric = " ".join(["oh"] * 8)
+    lyric = "is this real or am I real at all"
 
     verse = song.create_phrase(lyric, 4)
     song.append_phrase(verse)

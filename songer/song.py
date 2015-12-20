@@ -55,19 +55,14 @@ class Song():
 
         midi.write_midifile(filename, pattern)
 
-    def write_to_audio(self):
+    def write_to_audio(self, with_accompaniment=False):
         self.write_to_midi("midi_output.mid")
-        abc_notation = self.to_abc_notation()
-        os.system("perl external/sing/sing.pl -n 0 -t 1.2 -p "+abc_notation+" "+self.lyrics()+" &>voice_notation.txt")
-        os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
-        os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
+        for index, phrase in enumerate(self.phrases):
+            phrase.write_to_audio("phrase_"+str(index))
 
-        vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
-        accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
-        full_mix = vocal_track.overlay(accompaniment)
-        full_mix.export("full_mix.aiff", format="aiff")
+        track = AudioSegment.from_file('phrase_0.aiff', 'aiff')
+        for index in range(1, len(self.phrases)):
+            track += AudioSegment.from_file('phrase_'+str(index)+'.aiff', 'aiff')
+            os.remove('phrase_'+str(index)+'.aiff')
 
-        os.remove('vocal_track.aiff')
-        os.remove('accompaniment.aiff')
-        os.remove('voice_notation.txt')
-        os.remove('midi_output.mid')
+        track.export("full_everything.aiff", format="aiff")
