@@ -7,8 +7,9 @@ import os
 from pydub import AudioSegment
 
 class Song():
-    def __init__(self, beats_per_measure=8):
+    def __init__(self, beats_per_measure=8, tonic_pitch=40):
         self.phrases = []
+        self.tonic_pitch = tonic_pitch
         self.beats_per_measure = beats_per_measure
 
     def create_phrase(self, lyric, number_of_measures):
@@ -39,13 +40,13 @@ class Song():
                 if note.pitch == "rest":
                     offset += 110*note.rhythm
                 else:
-                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=64+note.pitch))
-                    track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=64+note.pitch))
+                    track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=self.tonic_pitch+24+note.pitch))
+                    track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=self.tonic_pitch+24+note.pitch))
                     offset = 0
 
             for bass_note in phrase.bass_notes:
-                bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=40+bass_note))
-                bass_track.append(midi.NoteOffEvent(tick=220 * self.beats_per_measure, pitch=40+bass_note))
+                bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=self.tonic_pitch+bass_note))
+                bass_track.append(midi.NoteOffEvent(tick=220 * self.beats_per_measure, pitch=self.tonic_pitch+bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))
@@ -58,9 +59,10 @@ class Song():
     def write_to_audio(self, with_accompaniment=False):
         self.write_to_midi("midi_output.mid")
         for index, phrase in enumerate(self.phrases):
-            phrase.write_to_audio("phrase_"+str(index))
+            phrase.write_to_audio("phrase_"+str(index), self.tonic_pitch)
 
         track = AudioSegment.from_file('phrase_0.aiff', 'aiff')
+        os.remove('phrase_0.aiff')
         for index in range(1, len(self.phrases)):
             track += AudioSegment.from_file('phrase_'+str(index)+'.aiff', 'aiff')
             os.remove('phrase_'+str(index)+'.aiff')

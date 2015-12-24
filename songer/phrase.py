@@ -68,7 +68,7 @@ class Phrase():
     def lyrics(self):
         return " ".join(self.words)
 
-    def write_to_midi(self, filename):
+    def write_to_midi(self, filename, tonic_pitch):
         """
         Resolution is 220 ticks per quarter note
         """
@@ -81,13 +81,13 @@ class Phrase():
             if note.pitch == "rest":
                 offset += 110*note.rhythm
             else:
-                track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=64+note.pitch))
-                track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=64+note.pitch))
+                track.append(midi.NoteOnEvent(tick=offset, velocity=120, pitch=tonic_pitch+24+note.pitch))
+                track.append(midi.NoteOffEvent(tick=(110*note.rhythm), pitch=tonic_pitch+24+note.pitch))
                 offset = 0
 
         for bass_note in self.bass_notes:
-            bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=40+bass_note))
-            bass_track.append(midi.NoteOffEvent(tick=220 * self.beats_per_measure, pitch=40+bass_note))
+            bass_track.append(midi.NoteOnEvent(tick=0, velocity=120, pitch=tonic_pitch+bass_note))
+            bass_track.append(midi.NoteOffEvent(tick=220 * self.beats_per_measure, pitch=tonic_pitch+bass_note))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         bass_track.append(midi.EndOfTrackEvent(tick=1))
@@ -97,8 +97,8 @@ class Phrase():
 
         midi.write_midifile(filename, pattern)
 
-    def write_to_audio(self, filename, with_accompaniment=False):
-        self.write_to_midi(filename+".mid")
+    def write_to_audio(self, filename, tonic_pitch, with_accompaniment=False):
+        self.write_to_midi(filename+".mid", tonic_pitch)
         abc_notation = self.to_abc_notation()
         os.system("perl external/sing/sing.pl -n 0 -t 1.25 -p "+abc_notation+" "+self.lyrics()+" &>voice_notation.txt")
         os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
