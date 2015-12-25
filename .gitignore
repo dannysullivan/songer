@@ -1,4 +1,8 @@
 *.pyc
 *.mid
+*.aiff
+*.aiff.asd
+*.aiff.asd
+.DS_Store
 .env
 markov
