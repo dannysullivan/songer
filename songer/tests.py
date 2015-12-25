@@ -1,17 +1,9 @@
 import unittest
-from section import Section
-from phrase import Phrase
+import lyrics_tools
 
-class TestPhraseMethods(unittest.TestCase):
-    def test_constructor(self):
-        phrase = Phrase("this is a ly-ric")
-        self.assertEqual(phrase.syllables, ["this", "is", "a", "ly", "ric"])
-
-    def test_create_melody(self):
-        phrase = Phrase("this is a ly-ric")
-        phrase.create_melody()
-        melody_beats = [rhythm for (note, rhythm) in phrase.melody]
-        self.assertEqual(sum(melody_beats), Phrase.beats_per_phrase)
+class TestLyricsMethods(unittest.TestCase):
+    def test_word_to_syllables(self):
+        self.assertEqual(lyrics_tools.word_to_syllables("syllable"), [['S', 'IH1'], ['L', 'AH0'], ['B', 'AH0', 'L']])
 
 if __name__ == "__main__":
     unittest.main()
