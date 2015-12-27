@@ -47,14 +47,13 @@ def word_to_syllables(word):
     syllable_array[-1] += current_non_vowels
     return syllable_array
 
-def syllable_to_tune_notation(syllable, pitch):
+def syllable_to_tune_notation(syllable, pitch, total_duration):
     """
     Takes a syllable (i.e., an array of phonemes) and returns the TUNE notation for that
     syllable at the given pitch
     """
-    total_length = 480
     number_of_consonants = len(syllable) - 1
-    length_of_vowel = total_length - (number_of_consonants*65)
+    length_of_vowel = total_duration - (number_of_consonants*65)
     tune_notation = []
     for phoneme in syllable:
         if phoneme[-1].isdigit():

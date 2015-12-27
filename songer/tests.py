@@ -8,10 +8,10 @@ class TestLyricsMethods(unittest.TestCase):
         self.assertEqual(lyrics_tools.word_to_syllables("syllable"), [['S', 'IH1'], ['L', 'AH0'], ['B', 'AH0', 'L']])
 
     def test_syllable_to_tune_notation(self):
-        self.assertEqual(lyrics_tools.syllable_to_tune_notation(['HH', 'AY1'], 370),
+        self.assertEqual(lyrics_tools.syllable_to_tune_notation(['HH', 'AY1'], 370, 480),
                 ["hh {D 65; P 370:0}", "1AY {D 415; P 370:0}"]
         )
-        self.assertEqual(lyrics_tools.syllable_to_tune_notation(['S', 'T', 'R', 'EH1', 'NG', 'K', 'TH'], 370),
+        self.assertEqual(lyrics_tools.syllable_to_tune_notation(['S', 'T', 'R', 'EH1', 'NG', 'K', 'TH'], 370, 480),
                 [
                     "s {D 65; P 370:0}",
                     "t {D 65; P 370:0}",
