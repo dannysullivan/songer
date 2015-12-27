@@ -3,6 +3,7 @@ import midi
 import re
 import random
 import os
+import lyrics_tools
 
 from pydub import AudioSegment
 
@@ -58,13 +59,40 @@ class Song():
 
     def write_to_audio(self, with_accompaniment=False):
         self.write_to_midi("midi_output.mid")
-        for index, phrase in enumerate(self.phrases):
-            phrase.write_to_audio("phrase_"+str(index), self.tonic_pitch)
 
-        track = AudioSegment.from_file('phrase_0.aiff', 'aiff')
-        os.remove('phrase_0.aiff')
-        for index in range(1, len(self.phrases)):
-            track += AudioSegment.from_file('phrase_'+str(index)+'.aiff', 'aiff')
-            os.remove('phrase_'+str(index)+'.aiff')
+        # generate TONE notation for whole song
+        notation = self.tune_notation()
+        tune_notation_file = open('voice_notation.txt', 'w')
+        tune_notation_file.write(notation)
+        tune_notation_file.close()
 
-        track.export("full_everything.aiff", format="aiff")
+        # create audio file from tone notation
+        os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
+        vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
+
+        if with_accompaniment:
+            os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
+            accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
+            full_mix = vocal_track.overlay(accompaniment)
+            os.remove('accompaniment.aiff')
+        else:
+            full_mix = vocal_track
+
+        full_mix.export("full_mix.aiff", format="aiff")
+
+        os.remove('vocal_track.aiff')
+        os.remove('voice_notation.txt')
+
+    def tune_notation(self):
+        output = "[[inpt TUNE]]\n"
+        for phrase in self.phrases:
+            for note in phrase.melody:
+                output += "~\n"
+                if note.pitch == "rest":
+                    output += "% {D 250}\n"
+                else:
+                    output += "\n".join(
+                        lyrics_tools.syllable_to_tune_notation(note.syllable, 370, 500)
+                    ) + "\n"
+        output += "[[inpt TEXT]]"
+        return output
