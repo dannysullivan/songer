@@ -30,7 +30,7 @@ def main():
     song.append_phrase(verse)
     song.append_phrase(verse)
 
-    song.write_to_audio()
+    song.write_to_audio(True)
 
 if __name__ == "__main__":
     main()
