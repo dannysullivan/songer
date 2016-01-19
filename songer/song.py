@@ -5,8 +5,6 @@ import random
 import os
 import lyrics_tools
 
-from pydub import AudioSegment
-
 class Song():
     def __init__(self, beats_per_measure=8, tonic_pitch=40):
         self.phrases = []
@@ -56,32 +54,6 @@ class Song():
         pattern.append(bass_track)
 
         midi.write_midifile(filename, pattern)
-
-    def write_to_audio(self, with_accompaniment=False):
-        self.write_to_midi("midi_output.mid")
-
-        # generate TONE notation for whole song
-        notation = self.tune_notation()
-        tune_notation_file = open('voice_notation.txt', 'w')
-        tune_notation_file.write(notation)
-        tune_notation_file.close()
-
-        # create audio file from tone notation
-        os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
-        vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
-
-        if with_accompaniment:
-            os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
-            accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
-            full_mix = vocal_track.overlay(accompaniment)
-            os.remove('accompaniment.aiff')
-        else:
-            full_mix = vocal_track
-
-        full_mix.export("full_mix.aiff", format="aiff")
-
-        os.remove('vocal_track.aiff')
-        os.remove('voice_notation.txt')
 
     def tune_notation(self):
         output = "[[inpt TUNE]]\n"

@@ -3,6 +3,7 @@ import datetime
 from phrase import Phrase
 from pydub import AudioSegment
 from lyric_translator import LyricTranslator
+from voice.voice import Voice
 
 def main():
     song = Song(8)
@@ -30,7 +31,9 @@ def main():
     song.append_phrase(verse)
     song.append_phrase(verse)
 
-    song.write_to_audio(True)
+    song.write_to_midi("midi_output123.mid")
+    voice = Voice(song.tune_notation())
+    voice.write_to_audio()
 
 if __name__ == "__main__":
     main()
