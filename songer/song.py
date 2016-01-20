@@ -6,10 +6,15 @@ import os
 import lyrics_tools
 
 class Song():
-    def __init__(self, beats_per_measure=8, tonic_pitch=40):
+    def __init__(self, **kwargs):
         self.phrases = []
-        self.tonic_pitch = tonic_pitch
-        self.beats_per_measure = beats_per_measure
+        self.tonic_pitch = kwargs.get('tonic_pitch', 40)
+        self.beats_per_measure = kwargs.get('beats_per_measure', 8)
+
+        lyrics = kwargs.get('lyrics', "").split("\n")
+        for lyric in lyrics:
+            phrase = self.create_phrase(lyric, 4)
+            self.append_phrase(phrase)
 
     def create_phrase(self, lyric, number_of_measures):
         phrase = Phrase(lyric, number_of_measures, self.beats_per_measure)

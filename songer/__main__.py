@@ -6,30 +6,11 @@ from lyric_translator import LyricTranslator
 from voice.voice import Voice
 
 def main():
-    song = Song(8)
-    # lyric = " ".join(["oh"] * 8)
-    lyric = "is this real or am I real at all"
-
-    verse = song.create_phrase(lyric, 4)
-    song.append_phrase(verse)
-    song.append_phrase(verse)
-
-    chorus = song.create_phrase(lyric, 4)
-    song.append_phrase(chorus)
-    song.append_phrase(chorus)
-
-    song.append_phrase(verse)
-    song.append_phrase(verse)
-
-    song.append_phrase(chorus)
-    song.append_phrase(chorus)
-
-    bridge = song.create_phrase(lyric, 4)
-    song.append_phrase(bridge)
-    song.append_phrase(bridge)
-
-    song.append_phrase(verse)
-    song.append_phrase(verse)
+    lyric = ("is this real or am I real at all\n"
+            "is this real or am I real at all\n"
+            "la la la la la la la\n"
+            "la la la la la la la la")
+    song = Song(lyrics=lyric)
 
     song.write_to_midi("midi_output123.mid")
     voice = Voice(song.tune_notation())
