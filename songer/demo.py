@@ -2,7 +2,6 @@ from song import Song
 import datetime
 from phrase import Phrase
 from pydub import AudioSegment
-from lyric_translator import LyricTranslator
 from voice.voice import Voice
 
 def main():
