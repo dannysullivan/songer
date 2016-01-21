@@ -12,8 +12,14 @@ class Song():
         self.beats_per_measure = kwargs.get('beats_per_measure', 8)
 
         lyrics = kwargs.get('lyrics', "").split("\n")
+
+        lyrics_map = {}
         for lyric in lyrics:
-            phrase = self.create_phrase(lyric, 4)
+            if lyric in lyrics_map.keys():
+                phrase = lyrics_map[lyric]
+            else:
+                phrase = self.create_phrase(lyric, 4)
+                lyrics_map[lyric] = phrase
             self.append_phrase(phrase)
 
     def create_phrase(self, lyric, number_of_measures):

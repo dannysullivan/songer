@@ -17,6 +17,16 @@ class TestSongMethods(unittest.TestCase):
         two_line_song = Song(lyrics="where\nare we")
         self.assertEqual(len(two_line_song.phrases), 2)
 
+    def test_phrase_setup_repetition(self):
+        """
+        Multiple copies of the same line are given the same
+        melodic treatment
+        """
+        song = Song(lyrics="first line\nsecond line\nfirst line")
+        first_phrase_notes = [note.__dict__ for note in song.phrases[0].melody]
+        third_phrase_notes = [note.__dict__ for note in song.phrases[2].melody]
+        self.assertEqual(first_phrase_notes, third_phrase_notes)
+
     def test_tune_notation(self):
         song = Song(lyrics="hi")
 
