@@ -1,7 +1,7 @@
 import unittest
 from voice import Voice
 
-class TestVoiceMethods(unittest.TestCase):
+class TestVoice(unittest.TestCase):
     def test_tune_notation(self):
         notation = "[[inpt TUNE]]\n[[input TEXT]]"
         voice = Voice(notation)

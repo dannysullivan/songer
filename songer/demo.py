@@ -1,7 +1,5 @@
-from song import Song
+from composer.song import Song
 import datetime
-from phrase import Phrase
-from pydub import AudioSegment
 from voice.voice import Voice
 
 def main():

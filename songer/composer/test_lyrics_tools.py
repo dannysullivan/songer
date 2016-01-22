@@ -1,7 +1,7 @@
 import unittest
 import lyrics_tools
 
-class TestLyricsMethods(unittest.TestCase):
+class TestLyricsTools(unittest.TestCase):
     def test_word_to_syllables(self):
         self.assertEqual(lyrics_tools.word_to_syllables("hi"), [['HH', 'AY1']])
         self.assertEqual(lyrics_tools.word_to_syllables("strength"), [['S', 'T', 'R', 'EH1', 'NG', 'K', 'TH']])

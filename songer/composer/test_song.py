@@ -1,7 +1,7 @@
 import unittest
 from song import Song
 
-class TestSongMethods(unittest.TestCase):
+class TestSong(unittest.TestCase):
     def test_phrase_setup(self):
         """
         A new song takes as input a series of lyrics split up onto
