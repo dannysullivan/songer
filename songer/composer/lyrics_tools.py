@@ -47,6 +47,12 @@ def word_to_syllables(word):
     syllable_array[-1] += current_non_vowels
     return syllable_array
 
+def pitch_to_frequency(pitch):
+    """
+    Takes a midi note pitch and converts it to a frequency in hz
+    """
+    return (2 ** ((pitch-69)/12.0)) * 440.0
+
 def syllable_to_tune_notation(syllable, pitch, total_duration):
     """
     Takes a syllable (i.e., an array of phonemes) and returns the TUNE notation for that
@@ -55,9 +61,10 @@ def syllable_to_tune_notation(syllable, pitch, total_duration):
     number_of_consonants = len(syllable) - 1
     length_of_vowel = total_duration - (number_of_consonants*65)
     tune_notation = []
+    frequency = pitch_to_frequency(pitch)
     for phoneme in syllable:
         if phoneme[-1].isdigit():
-            tune_notation.append(str(phoneme[-1])+phoneme[:-1] + " {D "+str(length_of_vowel)+"; P "+str(pitch)+":0}")
+            tune_notation.append(str(phoneme[-1])+phoneme[:-1] + " {D "+str(length_of_vowel)+"; P "+str(frequency)+":0}")
         else:
-            tune_notation.append(phoneme.lower() + " {D 65; P "+str(pitch)+":0}")
+            tune_notation.append(phoneme.lower() + " {D 65; P "+str(frequency)+":0}")
     return tune_notation

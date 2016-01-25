@@ -30,6 +30,7 @@ class Phrase():
     }
 
     def __init__(self, lyric, number_of_measures, beats_per_measure):
+        print("Creating phrase for: "+lyric)
         words = re.split("\s|\-", lyric.lower())
         self.number_of_measures = number_of_measures
         self.words = [lyrics_tools.word_to_syllables(word) for word in words]
