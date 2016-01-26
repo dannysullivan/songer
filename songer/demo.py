@@ -1,15 +1,14 @@
 from composer.song import Song
 import datetime
 from voice.voice import Voice
+from lyrics_tools import fetch_lyrics
 
 def main():
-    lyric = ("is this real or am I real at all\n"
-            "is this real or am I real at all\n"
-            "la la la la la la la\n"
-            "la la la la la la la la")
+    lyric = "\n".join(fetch_lyrics('The Beatles', 4))
+
     song = Song(lyrics=lyric)
 
-    song.write_to_midi("midi_output123.mid")
+    song.write_to_midi("midi_output.mid")
     voice = Voice(song.tune_notation())
     voice.write_to_audio()
 
