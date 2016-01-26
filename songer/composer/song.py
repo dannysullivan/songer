@@ -75,7 +75,7 @@ class Song():
                     output += "% {D 250}\n"
                 else:
                     output += "\n".join(
-                        lyrics_tools.syllable_to_tune_notation(note.syllable, self.tonic_pitch+24+note.pitch, 450)
+                        lyrics_tools.syllable_to_tune_notation(note.syllable, self.tonic_pitch+24+note.pitch, 500)
                     ) + "\n"
         output += "[[inpt TEXT]]"
         return output

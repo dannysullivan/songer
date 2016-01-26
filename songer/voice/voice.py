@@ -7,8 +7,9 @@ class Voice():
     of a robotic voice singing a song
     """
 
-    def __init__(self, tune_notation):
+    def __init__(self, tune_notation, midi_filename):
         self.tune_notation = tune_notation
+        self.midi_filename = midi_filename
 
     def write_to_audio(self, with_accompaniment=False):
         notation = self.tune_notation
@@ -20,15 +21,14 @@ class Voice():
         os.system("say -o vocal_track.aiff -v Victoria -f voice_notation.txt")
         vocal_track = AudioSegment.from_file('vocal_track.aiff', 'aiff')
 
-        # TODO: bring back accompaniment
-        # if with_accompaniment:
-            # os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 midi_output.mid")
-            # accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
-            # full_mix = vocal_track.overlay(accompaniment)
-            # os.remove('accompaniment.aiff')
-        # else:
+        if with_accompaniment:
+            os.system("fluidsynth -g 0.8 -F accompaniment.aiff external/soundfont.SF2 "+self.midi_filename)
+            accompaniment = AudioSegment.from_file('accompaniment.aiff', 'aiff')
+            full_mix = vocal_track.overlay(accompaniment)
+            os.remove('accompaniment.aiff')
+        else:
+            full_mix = vocal_track
 
-        full_mix = vocal_track
         full_mix.export("full_mix.aiff", format="aiff")
 
         os.remove('vocal_track.aiff')
