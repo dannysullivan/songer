@@ -33,7 +33,7 @@ class TestSong(unittest.TestCase):
         notation = song.tune_notation()
 
         self.assertRegexpMatches(notation, "[[inpt TUNE]]")
-        self.assertRegexpMatches(notation, "1AY {D 385; P")
+        self.assertRegexpMatches(notation, "1AY {D 435; P")
         self.assertRegexpMatches(notation, "hh {D 65; P")
         self.assertRegexpMatches(notation, "[[inpt TEXT]]")
 
