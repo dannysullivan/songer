@@ -1,8 +1,6 @@
 from phrase import Phrase
 import midi
 import re
-import random
-import os
 import lyrics_tools
 
 class Song():
