@@ -23,9 +23,7 @@ class TestSong(unittest.TestCase):
         melodic treatment
         """
         song = Song(lyrics="first line\nsecond line\nfirst line")
-        first_phrase_notes = [note.__dict__ for note in song.phrases[0].melody]
-        third_phrase_notes = [note.__dict__ for note in song.phrases[2].melody]
-        self.assertEqual(first_phrase_notes, third_phrase_notes)
+        self.assertEqual(song.phrases[0], song.phrases[2])
 
     def test_tune_notation(self):
         song = Song(lyrics="hi")

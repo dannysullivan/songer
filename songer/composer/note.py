@@ -7,3 +7,6 @@ class Note():
 
     def __str__(self):
         return str(self.pitch) + ", " + str(self.rhythm) + ", " + str(self.syllable) + ", " + str(self.part_of_word)
+
+    def __eq__(self, other):
+        return self.__dict__

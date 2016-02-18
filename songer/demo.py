@@ -4,7 +4,7 @@ from voice.voice import Voice
 from lyrics_tools import fetch_lyrics
 
 def main():
-    lyric = "\n".join(fetch_lyrics('The Beatles', 2))
+    lyric = "\n".join(fetch_lyrics('The Beatles', 6))
     lyric = lyric.replace(",", "")
 
     song = Song(lyrics=lyric)
